@@ -1,0 +1,62 @@
+@model MovieManager.Models.User
+@{
+    ViewBag.Title = "Profile";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-dark">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h4 class="mb-0">User Profile</h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(ViewBag.Message))
+                    {
+                        <div class="alert alert-success mb-4" role="alert">
+                            @ViewBag.Message
+                        </div>
+                    }
+
+                    @if (Context.Session.GetString("JWToken") != null)
+                    {
+                        <div class="card border mb-4">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Welcome!</h5>
+                                <p class="card-text">You are successfully logged in to Movies Manager</p>
+                            </div>
+                        </div>
+                        <div class="card border">
+                            <div class="card-body text-center">
+                                <p class="mb-3 text-success">Session Active</p>
+                                <form asp-controller="Login" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-dark">
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+
+                        <div class="alert alert-warning text-center" role="alert">
+                            No active session found.
+                            <div class="text-center">
+                                <p class="mb-0">Already have an account?
+                                    <a asp-controller="Login" asp-action="Index" class="text-dark">Login here</a>
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>

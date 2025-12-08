@@ -1,0 +1,66 @@
+@model MovieManager.Models.User
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card border-dark">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h4 class="mb-0">Create Account</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Index" method="post">
+                        <div class="form-group mb-3">
+                            <label for="Username" class="form-label">Username</label>
+                            <input asp-for="Username" class="form-control border-dark" required />
+                            <span asp-validation-for="Username" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="Password" class="form-label">Password</label>
+                            <input asp-for="Password" type="password" class="form-control border-dark" required />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-dark btn-lg">
+                                Create Account
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account? 
+                                <a asp-controller="Login" asp-action="Index" class="text-dark">Login here</a>
+                            </p>
+                        </div>
+                    </form>
+
+                    @if (!string.IsNullOrEmpty(ViewBag.Error))
+                    {
+                        <div class="alert alert-danger mt-3" role="alert">
+                            @ViewBag.Error
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .form-control:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-dark:hover {
+        background-color: #333;
+        border-color: #333;
+    }
+</style>
