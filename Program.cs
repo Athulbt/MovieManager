@@ -1,9 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using MovieManager.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using MovieManager.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,14 +11,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// MongoDB Configuration
 builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings"));
 builder.Services.AddSingleton<MovieService>();
 
-// To add services to the container.
-builder.Services.AddControllersWithViews();
-
-//Jwt
+// JWT Authentication
 builder.Services.AddSession();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<JwtService>();
@@ -40,13 +40,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
-
-// To add API controllers
+// Add API controllers
 builder.Services.AddControllers();
 
-// To add Swagger
+// Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 var app = builder.Build();
 
@@ -68,14 +73,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-//To Map API controllers
+// Map API controllers
 app.MapControllers();
 
 app.Run();
@@ -83,6 +86,6 @@ app.Run();
 // Mongo settings class
 public class MongoSettings
 {
-    public string ConnectionString { get; set; }
-    public string DatabaseName { get; set; }
+    public string? ConnectionString { get; set; }
+    public string? DatabaseName { get; set; }
 }
